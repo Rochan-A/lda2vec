@@ -372,7 +372,7 @@ class Corpus():
         loose = fast_replace(word_compact, self.keys_compact, self.keys_loose)
         return loose
 
-    def compact_to_flat(self, word_compact, *components):
+    def compact_to_flat(self, word_compact, component):
         """ Ravel a 2D compact array of documents (rows) and word
         positions (columns) into a 1D array of words. Leave out special
         tokens and ravel the component arrays in the same fashion.
@@ -419,10 +419,19 @@ class Corpus():
         idx = word_compact >= self.n_specials
         components_raveled = []
         msg = "Length of each component must much `word_compact` size"
+
+        #Changing this if only one component is present
+        """
         for component in components:
             raveled = np.tile(component[:, None], max_length)[idx]
             components_raveled.append(raveled)
             assert len(component) == n_docs, msg
+        """
+###################
+        raveled = np.tile(component[:, None], max_length)[idx]
+        components_raveled.append(raveled)
+        assert len(component) == n_docs, msg
+###################
         if len(components_raveled) == 0:
             return word_compact[idx]
         else:
