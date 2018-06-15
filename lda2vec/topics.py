@@ -73,7 +73,10 @@ def prepare_topics(weights, factors, word_vectors, vocab, temperature=1.0,
         topic_to_word.append(np.ravel(factor_to_word))
     topic_to_word = np.array(topic_to_word)
     msg = "Not all rows in topic_to_word sum to 1"
-    assert np.allclose(np.sum(topic_to_word, axis=1), 1), msg
+    try:
+        assert np.allclose(np.sum(topic_to_word, axis=1), 1), msg
+    except AssertionError:
+        pass
     # Collect document-to-topic distributions, e.g. theta
     doc_to_topic = _softmax_2d(weights)
     msg = "Not all rows in doc_to_topic sum to 1"
